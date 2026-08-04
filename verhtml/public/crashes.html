@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>크래시 리포트 · Soul Rush Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-left">
+      <h2>💥 크래시 리포트 (Crash Reports)</h2>
+      <span class="msg" id="msg"></span>
+    </div>
+    <div class="header-tools" id="headerTools"></div>
+  </div>
+
+  <h3>📊 최근 7일 집계 — 같은 크래시가 몇 명한테 터졌나</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>종류</th><th>씬</th><th>메시지 (앞 80자)</th><th>발생 횟수</th><th>영향 유저 수</th></tr>
+      </thead>
+      <tbody id="aggRows">
+        <tr><td colspan="5" class="loading">불러오는 중…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>📋 개별 리포트 (최근 200건)</h3>
+  <div class="tabs" id="tabs">
+    <button type="button" data-type="">전체</button>
+    <button type="button" data-type="native_crash">네이티브 크래시</button>
+    <button type="button" data-type="unhandled">미처리 예외</button>
+    <button type="button" data-type="exception">C# 예외</button>
+    <span class="spacer"></span>
+    <button type="button" class="btn btn-purge" id="purgeBtn">🧹 30일 지난 리포트 정리</button>
+  </div>
+
+  <p class="hint">
+    ⚠️ <b>네이티브 크래시</b>의 <b>발생 시각(UTC)</b>은 실제로 죽은 시각이 아니라 <b>다음 실행 시각</b>입니다.
+    실제 죽은 시점은 <b>로그 꼬리</b>를 펼쳐서 확인하세요.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>종류</th><th>유저</th><th>메시지 / 스택</th><th>씬</th>
+          <th>버전</th><th>환경</th><th>발생 시각 (UTC)</th><th>관리</th>
+        </tr>
+      </thead>
+      <tbody id="reportRows">
+        <tr><td colspan="9" class="loading">불러오는 중…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/crashes.js"></script>
+</body>
+</html>

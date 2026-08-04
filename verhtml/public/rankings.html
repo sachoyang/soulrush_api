@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>팀 랭킹 관리 · Soul Rush Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-left">
+      <h2>🏆 팀 랭킹 관리 (Team Rankings)</h2>
+      <span class="msg" id="msg"></span>
+    </div>
+    <div class="header-tools" id="headerTools"></div>
+  </div>
+
+  <p class="hint">
+    정렬: 소요 시간 오름차순(빠를수록 상위), 동률이면 등록 시각 순.
+    3인 협동 클리어 기록만 등록됩니다.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>순위</th><th>팀 이름</th><th>소요 시간</th><th>클리어 층</th><th>인원</th>
+          <th>총 딜량</th><th>팀원 (이름 · 딜량)</th><th>등록 시각</th><th>관리</th>
+        </tr>
+      </thead>
+      <tbody id="rankRows">
+        <tr><td colspan="9" class="loading">불러오는 중…</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/rankings.js"></script>
+</body>
+</html>

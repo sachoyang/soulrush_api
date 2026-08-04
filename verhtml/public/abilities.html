@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>스킬 모듈 관리 · Soul Rush Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-left">
+      <h2>⚔️ 스킬 모듈 관리 (Ability Manager · 7테이블)</h2>
+      <span class="msg" id="msg"></span>
+    </div>
+    <div class="header-tools" id="headerTools"></div>
+  </div>
+
+  <!-- ===== 편집 폼 =====
+       원본과 동일하게 이 패널 하나를 DOM 안에서 옮겨 다니며 재사용한다.
+       · 새 스킬  → 목록 맨 위(#topEditorHost)
+       · 수정     → 해당 스킬 행 바로 아래(인라인)
+       · 닫으면   → #editorHome 으로 되돌아가 숨는다 -->
+  <div class="form-panel" id="editorPanel" style="display:none;">
+    <h3 id="formTitle" style="margin-top:0; color:var(--green);">새 스킬 추가</h3>
+    <p class="hint" style="margin:0 0 12px;">
+      ※ 연출값(아이콘/애니메이션/VFX/사운드/히트박스)은 유니티 SO 모듈이 전담합니다.
+      서버는 기획/밸런스 수치만 관리하며, 클라 연결점은 <b>ability_id</b> 와 <b>bit_index</b> 입니다.<br>
+      ※ bit_index 범위 —
+      <span class="type-Active">Active 1~19</span> ·
+      <span class="type-Passive">Passive 20~39</span> ·
+      <span class="type-Utility">Utility 40~60</span>
+    </p>
+
+    <form id="abilityForm">
+      <div class="form-grid">
+        <div><label>Ability ID (PK)</label><input type="text" id="ability_id" required></div>
+        <div>
+          <label>타입</label>
+          <select id="ability_type">
+            <option value="Active">Active</option>
+            <option value="Passive">Passive</option>
+            <option value="Utility">Utility</option>
+          </select>
+        </div>
+        <div><label>비트 인덱스 <span class="hint" id="bitHint">(1~19)</span></label><input type="number" id="bit_index" min="1" max="60" required></div>
+        <div><label>표시 이름</label><input type="text" id="display_name" required></div>
+
+        <div><label>등장 스테이지</label><input type="number" id="appear_stage" min="1" value="1"></div>
+        <div><label>최대 레벨 (max_level)</label><input type="number" id="max_level" min="1" value="1"></div>
+        <div>
+          <label>기본 스킬(is_basic_skill)</label>
+          <select id="is_basic_skill">
+            <option value="0">0 · 비트로만 해금</option>
+            <option value="1">1 · 모든 유저 기본 지급</option>
+          </select>
+        </div>
+        <div>
+          <label>기본 해금(is_unlocked)</label>
+          <select id="is_unlocked">
+            <option value="0">0 · 잠김</option>
+            <option value="1">1 · 기본 해금</option>
+          </select>
+        </div>
+
+        <!-- 타입별 기본값 (Active/Utility 만 노출) -->
+        <div class="base-field" data-base="cooldown"><label>쿨타임 (초)</label><input type="number" step="0.1" id="cooldown_seconds" value="0"></div>
+        <div class="base-field" data-base="stamina"><label>소모 스태미나</label><input type="number" step="0.1" id="stamina_cost" value="0"></div>
+        <div class="base-field" data-base="special"><label>특수효과 (Utility)</label><input type="text" id="special_effect" value="None"></div>
+
+        <div class="full-width"><label>스킬 설명 (토큰 포함 가능, 예: {hit1})</label><input type="text" id="description"></div>
+      </div>
+
+      <div id="levelsPanel">
+        <h4>레벨별 수치 (1 ~ max_level)</h4>
+        <div id="levelsContainer"></div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="submitBtn">DB에 저장 (Save)</button>
+        <button type="button" class="btn btn-gray" id="resetBtn">입력창 초기화</button>
+        <button type="button" class="btn btn-gray" id="closeBtn">✕ 닫기</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="list-controls">
+    <div>
+      <button type="button" class="btn btn-add" id="addBtn">➕ 새 스킬 추가</button>
+      <span class="hint" style="margin-left:12px;">💡 각 스킬의 <b>수정</b> 버튼을 누르면 편집창이 그 밑에 펼쳐집니다.</span>
+    </div>
+    <div>
+      <button type="button" class="btn btn-ghost" id="expandAll">전체 펼치기</button>
+      <button type="button" class="btn btn-ghost" id="collapseAll">전체 접기</button>
+    </div>
+  </div>
+
+  <!-- 새 스킬 추가 시 편집 폼이 여기(목록 맨 위)로 이동해서 열린다 -->
+  <div id="topEditorHost"></div>
+
+  <!-- 타입별 섹션(Active/Passive/Utility)이 JS 로 렌더링된다 -->
+  <div id="sections"><div class="loading">불러오는 중…</div></div>
+
+  <!-- 편집 폼의 기본 보관 위치(닫으면 여기로 되돌아와 숨겨진다) -->
+  <div id="editorHome" style="display:none;"></div>
+
+  <script src="config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/abilities.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>유저 DB 관리 · Soul Rush Admin</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="header">
+    <div class="header-left">
+      <h2>🛠️ Soul Rush Admin — 유저 DB</h2>
+      <span class="msg" id="msg"></span>
+    </div>
+    <div class="header-tools" id="headerTools"></div>
+  </div>
+
+  <!-- 서버 로그 (원본 log_viewer.php 상단 패널) -->
+  <div class="panel">
+    <h2>
+      📜 Server Logs
+      <button type="button" class="btn btn-accent" id="btnReload">수동 새로고침</button>
+    </h2>
+    <details>
+      <summary>서버 로그 펼치기/접기 (기본 접힘)</summary>
+      <pre id="serverLog" style="max-height:40vh;">불러오는 중…</pre>
+    </details>
+  </div>
+
+  <!-- user_data 표 -->
+  <div class="panel">
+    <h2>🗄️ Database (user_data)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>IDX</th>
+            <th>Login ID</th>
+            <th>Nickname</th>
+            <th>Skills</th>
+            <th>Admin</th>
+            <th>Created At</th>
+            <th>관리</th>
+          </tr>
+        </thead>
+        <tbody id="userRows">
+          <tr><td colspan="7" class="loading">불러오는 중…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 스킬 보유 현황 모달 -->
+  <div class="modal-overlay" id="skillModal">
+    <div class="modal-box">
+      <button type="button" class="modal-close" id="modalClose">✖</button>
+      <h3 id="skillModalTitle">보유 스킬</h3>
+      <p class="meta" id="skillModalDec"></p>
+      <div id="skillModalChips"></div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/users.js"></script>
+</body>
+</html>
